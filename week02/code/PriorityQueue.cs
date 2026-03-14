@@ -1,4 +1,4 @@
-﻿public class PriorityQueue
+public class PriorityQueue
 {
     private List<PriorityItem> _queue = new();
 
@@ -16,25 +16,25 @@
     }
 
     public string Dequeue()
+{
+    if (_queue.Count == 0)
     {
-        if (_queue.Count == 0) // Verify the queue is not empty
-        {
-            throw new InvalidOperationException("The queue is empty.");
-        }
-
-        // Find the index of the item with the highest priority to remove
-        var highPriorityIndex = 0;
-        for (int index = 1; index < _queue.Count - 1; index++)
-        {
-            if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
-                highPriorityIndex = index;
-        }
-
-        // Remove and return the item with the highest priority
-        var value = _queue[highPriorityIndex].Value;
-        return value;
+        throw new InvalidOperationException("The queue is empty.");
     }
 
+    var highPriorityIndex = 0;
+    // FIX 1: Change to < _queue.Count to check the very last item
+    for (int index = 1; index < _queue.Count; index++) 
+    {
+        // FIX 2: Change >= to > to keep the first person in case of a tie
+        if (_queue[index].Priority > _queue[highPriorityIndex].Priority)
+            highPriorityIndex = index;
+    }
+
+    var value = _queue[highPriorityIndex].Value;
+    _queue.RemoveAt(highPriorityIndex);
+    return value;
+}
     // DO NOT MODIFY THE CODE IN THIS METHOD
     // The graders rely on this method to check if you fixed all the bugs, so changes to it will cause you to lose points.
     public override string ToString()
